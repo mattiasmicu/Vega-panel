@@ -10,7 +10,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children, currentUser }) =
   return (
     <div className="min-h-screen bg-gray-900">
       <Header currentUser={currentUser} />
-      <main className="container mx-auto py-6">
+      <main className="container mx-auto px-4 py-6">
         {children}
       </main>
     </div>
