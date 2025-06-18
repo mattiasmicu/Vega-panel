@@ -1,37 +1,39 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { format } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
 
 interface HeaderProps {
   currentUser: string;
 }
 
 export const Header: React.FC<HeaderProps> = ({ currentUser }) => {
-  const [currentTime, setCurrentTime] = useState<string>('');
+  const [currentTime, setCurrentTime] = useState(new Date());
 
+  // Update time every second
   useEffect(() => {
-    // Update time immediately
-    updateTime();
-    
-    // Update time every second
-    const timer = setInterval(updateTime, 1000);
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
 
     return () => clearInterval(timer);
   }, []);
 
-  const updateTime = () => {
-    const now = new Date();
-    const timeString = now.toISOString().replace('T', ' ').substring(0, 19);
-    setCurrentTime(timeString);
-  };
+  // Format time in UTC
+  const formattedTime = format(currentTime, 'yyyy-MM-dd HH:mm:ss');
 
   return (
-    <header className="bg-gray-800 border-b border-gray-700 p-4">
-      <div className="container mx-auto flex justify-between items-center">
-        <div className="text-gray-300 font-mono text-sm">
-          Current Date and Time (UTC): {currentTime}
-        </div>
-        <div className="text-gray-300 text-sm">
-          Current User's Login: {currentUser}
+    <header className="bg-gray-800 border-b border-gray-700">
+      <div className="container mx-auto px-4 py-3">
+        <div className="flex justify-between items-center">
+          {/* Time Display */}
+          <div className="text-gray-300 font-mono">
+            UTC - {formattedTime}
+          </div>
+
+          {/* User Info */}
+          <div className="text-gray-300">
+            {currentUser}
+          </div>
         </div>
       </div>
     </header>
