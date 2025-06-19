@@ -1,94 +1,166 @@
-# Vega Theme for Pterodactyl
+# Vega Panel
 
-A modern, customizable theme for Pterodactyl Panel with a clean dark interface and enhanced user experience.
+A modern, full-stack game server control panel built with React, TypeScript, Express, and Prisma.
 
-![Vega Theme Preview](preview.png)
+---
 
 ## Features
 
-- 🎨 Modern dark theme with customizable branding
-- 📱 Fully responsive design
-- 📊 Enhanced server statistics and graphs
-- ⚡ Quick action shortcuts
-- 🎮 Improved game server management
-- 🔒 Beautiful authentication pages
+- User authentication with JWT
+- Real-time notifications
+- Game server management (create, start, stop, etc.)
+- User and role management
+- Responsive, modern UI
+- PostgreSQL database (via Prisma)
+- Modular API and React component structure
 
-## Requirements
+---
 
-- Pterodactyl Panel 1.x
-- PHP 8.0+
-- Node.js 16+
-- Composer
+## Prerequisites
 
-## Installation
+- **Node.js** (v18+ recommended)
+- **npm** or **yarn**
+- **PostgreSQL** (for backend/database)
+- **Git** (to clone the repository)
 
-1. Navigate to your Pterodactyl installation:
+---
+
+## Getting Started
+
+### 1. Clone the Repository
+
 ```bash
-cd /var/www/pterodactyl
+git clone https://github.com/mattiasmicu/Vega-panel.git
+cd Vega-panel
 ```
 
-2. Clone the theme repository:
+### 2. Install Dependencies
+
+#### Frontend
+
 ```bash
-git clone https://github.com/mattiasmicu/Vega-panel.git resources/themes/vega
+npm install
+npm install axios date-fns date-fns-tz react-router-dom lucide-react
+npm install -D @types/react @types/react-dom @types/react-router-dom
 ```
 
-3. Install dependencies:
+#### Backend (if using API/server features)
+
 ```bash
-npm install --prefix resources/themes/vega
-composer update
+cd api
+npm install express @prisma/client prisma bcrypt jsonwebtoken cookie-parser
+npm install --save-dev @types/express @types/bcrypt @types/jsonwebtoken @types/cookie-parser
 ```
 
-4. Build the theme:
+### 3. Environment Configuration
+
+#### Frontend
+
+Create a `.env` file in the root if you need to override API base URLs, for example:
+```
+VITE_API_URL=http://localhost:3000/api
+```
+
+#### Backend
+
+Create a `.env` file in the `/api` folder:
+
+```
+DATABASE_URL="postgresql://user:password@localhost:5432/vega_panel"
+JWT_SECRET="your-very-secure-jwt-secret"
+```
+
+### 4. Database Setup
+
+Make sure PostgreSQL is running and your database is created.
+
+Run Prisma migrations (from `/api`):
+
 ```bash
-npm run build --prefix resources/themes/vega
+npx prisma migrate dev
+npx prisma generate
 ```
 
-5. Clear the panel cache:
+### 5. Running the App
+
+#### Backend
+
+From the `/api` directory:
+
 ```bash
-php artisan view:clear
-php artisan cache:clear
+npm run dev
 ```
+(Default port: 3000)
 
-6. Set theme in panel settings or .env:
-```
-APP_THEME=vega
-```
+#### Frontend
 
-## Customization
+From the root directory:
 
-1. Copy `.env.example` to `.env` in the theme directory:
 ```bash
-cp resources/themes/vega/.env.example resources/themes/vega/.env
+npm run dev
+```
+(Default port: 5173 or set by your framework)
+
+---
+
+## Project Structure
+
+```
+resources/
+└── scripts/
+    ├── components/
+    │   └── layout/
+    │       ├── AppLayout.tsx
+    │       └── Header.tsx
+    └── pages/
+        └── server/
+            └── ServerListPage.tsx
+api/
+└── routes/
+    ├── auth.ts
+    └── notifications.ts
+    ...
 ```
 
-2. Edit the `.env` file to customize:
-- Panel name
-- Logo URL
-- Primary color
-- Secondary color
-- Accent color
+---
 
-## Development
+## Usage Example
 
-1. Install development dependencies:
-```bash
-npm install --prefix resources/themes/vega
+```typescript
+import { AppLayout } from '@/components/layout/AppLayout';
+
+function YourPage() {
+  return (
+    <AppLayout currentUser="mattiasmicu">
+      {/* Your page content */}
+    </AppLayout>
+  );
+}
 ```
 
-2. Start development server:
-```bash
-npm run dev --prefix resources/themes/vega
-```
+---
 
-3. Build for production:
-```bash
-npm run build --prefix resources/themes/vega
-```
+## Additional Setup
 
-## Support
+- Place a `default-avatar.png` in your `public/` folder for the default user avatar.
+- Make sure your `tsconfig.json` includes alias config for `@/*` imports.
 
-If you encounter any issues or need help, please create an issue on GitHub.
+---
+
+## Security
+
+- Never commit your real secrets!
+- Use secure cookies and HTTPS in production.
+- Change your JWT secret and database credentials before deploying.
+
+---
+
+## Contributing
+
+Pull requests and issues are welcome! Please open an issue if you find a bug or want to request a feature.
+
+---
 
 ## License
 
-This theme is open-source software licensed under the MIT license.
+MIT
